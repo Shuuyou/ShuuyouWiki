@@ -5,6 +5,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "editor": "node tools/visual-editor/server.mjs",
+    "editor:dev": "node tools/visual-editor/server.mjs",
     "start": "next start",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
@@ -30,6 +32,6 @@
     "tailwindcss": "^4.2.2",
     "typescript": "^6.0.2",
     "eslint-config-next": "16.2.2",
-    "eslint": "^10.1.0"
+    "eslint": "^9.39.1"
   }
 }

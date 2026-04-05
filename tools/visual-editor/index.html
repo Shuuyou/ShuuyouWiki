@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shuuyou Visual Editor</title>
+    <style>
+      :root {
+        --bg: #f5f5f5;
+        --fg: #0a0a0a;
+        --border: #111;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        min-height: 100vh;
+      }
+      .panel {
+        border-right: 1px solid var(--border);
+        padding: 16px;
+        background: #fff;
+      }
+      .main {
+        padding: 16px;
+      }
+      h1, h2, h3 {
+        margin: 0 0 12px;
+      }
+      .group {
+        border: 1px solid var(--border);
+        padding: 12px;
+        margin-bottom: 12px;
+        background: #fff;
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+      input, select, textarea, button {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 0;
+        background: #fff;
+        color: #111;
+        font-size: 14px;
+        padding: 8px;
+      }
+      textarea { min-height: 120px; resize: vertical; }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .btn {
+        cursor: pointer;
+        background: #111;
+        color: #fff;
+      }
+      .btn.secondary {
+        background: #fff;
+        color: #111;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .tabs button { width: auto; }
+      .hidden { display: none; }
+      .list {
+        display: grid;
+        gap: 8px;
+      }
+      .item {
+        border: 1px solid var(--border);
+        padding: 8px;
+      }
+      .preview {
+        border: 1px solid var(--border);
+        min-height: 220px;
+        background: #fff;
+        padding: 16px;
+      }
+      .status {
+        margin-top: 8px;
+        font-size: 12px;
+      }
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .panel { border-right: 0; border-bottom: 1px solid var(--border); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="panel">
+        <h1>Visual Editor</h1>
+        <p style="font-size:12px;margin-top:0;opacity:.75;">本地工具，不参与 Next.js 生产构建。</p>
+
+        <div class="tabs">
+          <button id="tab-home" class="btn">主页</button>
+          <button id="tab-wiki" class="btn secondary">Wiki 页面</button>
+        </div>
+
+        <section id="home-controls">
+          <div class="group">
+            <h3>主页文案</h3>
+            <label>Tagline</label>
+            <input id="home-tagline" />
+            <label style="margin-top:8px;">简介</label>
+            <textarea id="home-intro"></textarea>
+          </div>
+
+          <div class="group">
+            <h3>模块卡片</h3>
+            <div id="module-list" class="list"></div>
+            <button id="add-module" class="btn secondary" style="margin-top:8px;">新增模块卡</button>
+          </div>
+
+          <div class="group">
+            <h3>信息卡片</h3>
+            <div id="info-list" class="list"></div>
+            <button id="add-info" class="btn secondary" style="margin-top:8px;">新增信息卡</button>
+          </div>
+
+          <button id="save-home" class="btn">保存主页配置</button>
+        </section>
+
+        <section id="wiki-controls" class="hidden">
+          <div class="group">
+            <h3>定位页面</h3>
+            <label>模块</label>
+            <select id="wiki-module"></select>
+            <label style="margin-top:8px;">主题</label>
+            <select id="wiki-topic"></select>
+            <button id="load-wiki" class="btn secondary" style="margin-top:8px;">加载页面</button>
+          </div>
+
+          <div class="group">
+            <h3>创建主题</h3>
+            <label>新主题 slug</label>
+            <input id="new-topic" placeholder="例如 sensor-basics" />
+            <button id="create-topic" class="btn secondary" style="margin-top:8px;">创建并加载</button>
+          </div>
+
+          <div class="group">
+            <h3>页面信息</h3>
+            <label>标题</label>
+            <input id="wiki-title" />
+            <label style="margin-top:8px;">描述</label>
+            <input id="wiki-description" />
+          </div>
+
+          <div class="group">
+            <h3>组件片段</h3>
+            <div class="row">
+              <div>
+                <label>宽度 (%)</label>
+                <input id="snippet-width" type="number" min="30" max="100" value="80" />
+              </div>
+              <div>
+                <label>语义</label>
+                <select id="snippet-tone">
+                  <option value="plain">plain</option>
+                  <option value="note">note</option>
+                  <option value="warn">warn</option>
+                </select>
+              </div>
+            </div>
+            <button id="insert-editor-block" class="btn secondary" style="margin-top:8px;">插入 EditorBlock</button>
+            <button id="insert-heading" class="btn secondary" style="margin-top:8px;">插入二级标题</button>
+          </div>
+
+          <button id="save-wiki" class="btn">保存 Wiki 页面</button>
+        </section>
+
+        <div id="status" class="status"></div>
+      </aside>
+
+      <main class="main">
+        <section id="home-preview-wrap">
+          <h2>主页预览数据</h2>
+          <pre id="home-preview" class="preview"></pre>
+        </section>
+
+        <section id="wiki-preview-wrap" class="hidden">
+          <h2>Wiki Markdown/MDX</h2>
+          <textarea id="wiki-content" class="preview" style="min-height:65vh;"></textarea>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const state = {
+        modules: [],
+        home: null,
+      };
+
+      const el = (id) => document.getElementById(id);
+      const statusEl = el('status');
+
+      function setStatus(msg, isErr = false) {
+        statusEl.textContent = msg;
+        statusEl.style.color = isErr ? '#b91c1c' : '#111';
+      }
+
+      function escapeHtml(v) {
+        return String(v)
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;');
+      }
+
+      function switchTab(tab) {
+        const home = tab === 'home';
+        el('home-controls').classList.toggle('hidden', !home);
+        el('wiki-controls').classList.toggle('hidden', home);
+        el('home-preview-wrap').classList.toggle('hidden', !home);
+        el('wiki-preview-wrap').classList.toggle('hidden', home);
+        el('tab-home').className = home ? 'btn' : 'btn secondary';
+        el('tab-wiki').className = home ? 'btn secondary' : 'btn';
+      }
+
+      function moduleCardHTML(item, idx, kind) {
+        return `
+          <div class="item" data-kind="${kind}" data-index="${idx}">
+            <div class="row">
+              <input data-key="title" value="${escapeHtml(item.title || '')}" placeholder="标题" />
+              <input data-key="sub" value="${escapeHtml(item.sub || '')}" placeholder="英文副标题" />
+            </div>
+            <input data-key="href" value="${escapeHtml(item.href || '')}" placeholder="链接" style="margin-top:6px;" />
+            <input data-key="desc" value="${escapeHtml(item.desc || '')}" placeholder="描述" style="margin-top:6px;" />
+            ${kind === 'info' ? `<input data-key="action" value="${escapeHtml(item.action || '')}" placeholder="按钮文本" style="margin-top:6px;" />` : ''}
+            ${kind === 'info' ? `<textarea data-key="text" placeholder="正文" style="margin-top:6px;">${escapeHtml(item.text || '')}</textarea>` : ''}
+            <button data-action="remove" class="btn secondary" style="margin-top:6px;">删除</button>
+          </div>
+        `;
+      }
+
+      function renderHomeForms() {
+        const h = state.home;
+        el('home-tagline').value = h.tagline || '';
+        el('home-intro').value = h.intro || '';
+        el('module-list').innerHTML = h.modules.map((m, i) => moduleCardHTML(m, i, 'module')).join('');
+        el('info-list').innerHTML = h.infoCards.map((m, i) => moduleCardHTML(m, i, 'info')).join('');
+        el('home-preview').textContent = JSON.stringify(h, null, 2);
+      }
+
+      function bindDynamicList(containerId, key) {
+        el(containerId).addEventListener('input', (e) => {
+          const card = e.target.closest('.item');
+          if (!card) return;
+          const idx = Number(card.dataset.index);
+          const dataKey = e.target.dataset.key;
+          if (!dataKey) return;
+          state.home[key][idx][dataKey] = e.target.value;
+          el('home-preview').textContent = JSON.stringify(state.home, null, 2);
+        });
+
+        el(containerId).addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-action="remove"]');
+          if (!btn) return;
+          const card = btn.closest('.item');
+          const idx = Number(card.dataset.index);
+          state.home[key].splice(idx, 1);
+          renderHomeForms();
+        });
+      }
+
+      function renderModuleOptions() {
+        const moduleSelect = el('wiki-module');
+        moduleSelect.innerHTML = state.modules.map((m) => `<option value="${m.name}">${m.name}</option>`).join('');
+      }
+
+      function renderTopicOptions() {
+        const mod = el('wiki-module').value;
+        const selected = state.modules.find((m) => m.name === mod);
+        const topicSelect = el('wiki-topic');
+        const topics = selected ? selected.topics : [];
+        topicSelect.innerHTML = topics.map((t) => `<option value="${t}">${t}</option>`).join('');
+      }
+
+      async function loadBootstrap() {
+        const [moduleRes, homeRes] = await Promise.all([
+          fetch('/api/modules').then((r) => r.json()),
+          fetch('/api/homepage').then((r) => r.json()),
+        ]);
+
+        state.modules = moduleRes.modules;
+        state.home = homeRes;
+        renderHomeForms();
+        renderModuleOptions();
+        renderTopicOptions();
+        setStatus('初始化完成');
+      }
+
+      function insertAtCursor(textarea, snippet) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        textarea.value = textarea.value.slice(0, start) + snippet + textarea.value.slice(end);
+        textarea.selectionStart = textarea.selectionEnd = start + snippet.length;
+        textarea.focus();
+      }
+
+      el('tab-home').addEventListener('click', () => switchTab('home'));
+      el('tab-wiki').addEventListener('click', () => switchTab('wiki'));
+
+      el('home-tagline').addEventListener('input', (e) => {
+        state.home.tagline = e.target.value;
+        el('home-preview').textContent = JSON.stringify(state.home, null, 2);
+      });
+
+      el('home-intro').addEventListener('input', (e) => {
+        state.home.intro = e.target.value;
+        el('home-preview').textContent = JSON.stringify(state.home, null, 2);
+      });
+
+      bindDynamicList('module-list', 'modules');
+      bindDynamicList('info-list', 'infoCards');
+
+      el('add-module').addEventListener('click', () => {
+        state.home.modules.push({ title: '', sub: '', href: '', desc: '' });
+        renderHomeForms();
+      });
+
+      el('add-info').addEventListener('click', () => {
+        state.home.infoCards.push({ title: '', text: '', href: '', action: '' });
+        renderHomeForms();
+      });
+
+      el('save-home').addEventListener('click', async () => {
+        const res = await fetch('/api/homepage/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state.home),
+        });
+        const data = await res.json();
+        if (!res.ok) return setStatus(data.error || '保存失败', true);
+        setStatus('主页配置已保存');
+      });
+
+      el('wiki-module').addEventListener('change', renderTopicOptions);
+
+      el('load-wiki').addEventListener('click', async () => {
+        const module = el('wiki-module').value;
+        const topic = el('wiki-topic').value;
+        const res = await fetch(`/api/wiki?module=${encodeURIComponent(module)}&topic=${encodeURIComponent(topic)}`);
+        const data = await res.json();
+        if (!res.ok) return setStatus(data.error || '加载失败', true);
+        el('wiki-title').value = data.title || '';
+        el('wiki-description').value = data.description || '';
+        el('wiki-content').value = data.content || '';
+        setStatus(`已加载 ${module}/${topic}`);
+      });
+
+      el('create-topic').addEventListener('click', async () => {
+        const module = el('wiki-module').value;
+        const topic = el('new-topic').value.trim();
+        if (!topic) return setStatus('请输入主题 slug', true);
+
+        const res = await fetch('/api/wiki/create-topic', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ module, topic }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) return setStatus(data.error || '创建失败', true);
+
+        await loadBootstrap();
+        el('wiki-module').value = module;
+        renderTopicOptions();
+        el('wiki-topic').value = topic;
+        el('load-wiki').click();
+        setStatus(`已创建主题 ${module}/${topic}`);
+      });
+
+      el('save-wiki').addEventListener('click', async () => {
+        const payload = {
+          module: el('wiki-module').value,
+          topic: el('wiki-topic').value,
+          title: el('wiki-title').value,
+          description: el('wiki-description').value,
+          content: el('wiki-content').value,
+        };
+
+        const res = await fetch('/api/wiki/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) return setStatus(data.error || '保存失败', true);
+        setStatus(`已保存 ${payload.module}/${payload.topic}`);
+      });
+
+      el('insert-editor-block').addEventListener('click', () => {
+        const width = Number(el('snippet-width').value || 80);
+        const tone = el('snippet-tone').value || 'plain';
+        const snippet = `\n<EditorBlock width={${width}} tone=\"${tone}\">\n在这里输入内容\n</EditorBlock>\n`;
+        insertAtCursor(el('wiki-content'), snippet);
+      });
+
+      el('insert-heading').addEventListener('click', () => {
+        insertAtCursor(el('wiki-content'), '\n## 新增小节\n\n在这里输入内容。\n');
+      });
+
+      loadBootstrap().catch((err) => {
+        console.error(err);
+        setStatus(`初始化失败: ${err.message}`, true);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+# Default ownership
+* @shuuyou
+
+# Content ownership
+/content/docs/** @shuuyou
+/content/editor/** @shuuyou
+/docs/** @shuuyou
+
+# App and components
+/app/** @shuuyou
+/components/** @shuuyou
+/lib/** @shuuyou

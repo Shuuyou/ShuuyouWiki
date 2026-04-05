@@ -6,7 +6,276 @@ html {
   scrollbar-gutter: stable;
 }
 
-html > body[data-scroll-locked] {
-  margin-right: 0px !important;
-  --removed-body-scroll-bar-size: 0px !important;
+@layer base {
+  :root {
+    /* --- 1. 锋利的直角 (神椿灵魂) --- */
+    --radius: 0px;
+    --fd-radius: 0px;
+
+    /* --- 2. 绝对黑白环境 ( Kamitsubaki Colorways) --- */
+    --background: 0 0% 100%;
+    /* 纯白 */
+    --foreground: 0 0% 0%;
+    /* 纯黑 */
+
+    --fd-background: 0 0% 100%;
+    --fd-foreground: 0 0% 10%;
+    /* 侧栏字稍微柔和一点，防止刺眼 */
+    --fd-card: 0 0% 100%;
+    --fd-popover: 0 0% 100%;
+
+    /* 所有分割线必须是锋利的纯黑色 (重要) */
+    --fd-border: 0 0% 0%;
+
+    /* --- 3. 解决全黑填充 Bug 的核心覆盖 (重要) --- */
+    /* 我们将原本用于灰色背景的变量，强制设为透明或纯白，防止其自动变黑 */
+    --fd-muted: 0 0% 100%;
+    --fd-muted-foreground: 0 0% 40%;
+    --fd-secondary: 0 0% 100%;
+
+    /* 核心修复：将悬浮/激活时的浅灰色背景强制去掉，改为透明 */
+    /* 这将解决图4右侧黑bar的问题 */
+    --fd-accent: 0 0% 100%;
+    --fd-accent-foreground: 0 0% 0%;
+  }
+
+  /* 暗暗模式也需极致反差 */
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --fd-background: 0 0% 0%;
+    --fd-foreground: 0 0% 90%;
+    --fd-muted: 0 0% 0%;
+    --fd-accent: 0 0% 0%;
+    --fd-border: 0 0% 100%;
+    /* 暗色模式边框为纯白 */
+  }
+}
+
+@layer utilities {
+
+  /* 移除所有默认阴影 */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* 让整个站点应用自定义双字体引擎 (修正排版) */
+  .font-sans,
+  p,
+  li,
+  pre,
+  code {
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  /* 正文宋体化 (神椿风的海报感) */
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif,
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    font-family: var(--font-noto-serif), serif !important;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    /* 标题字距紧缩 */
+    margin-top: 1em;
+  }
+
+  strong {
+    font-weight: 900;
+    color: #000;
+  }
+
+  /* 代码块风格 (冷峻、直角) */
+  pre,
+  code {
+    background-color: transparent !important;
+    border: 1px solid #000;
+    font-family: var(--font-inter), mono !important;
+    font-size: 0.85em;
+  }
+}
+
+/* --- 精准接管 Fumadocs 组件样式 --- */
+
+/* 1. 侧边栏重构 ( boxed 风格 ) */
+aside {
+  border-right: 1px solid #000 !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+/* 2. 側邊欄內部元素：Search Bar boxed */
+aside [data-search="true"] {
+  border-bottom: 1px solid #000;
+  padding: 1rem;
+}
+
+aside input {
+  border: 1px solid #000 !important;
+  background-color: transparent !important;
+}
+
+/* 3. 侧栏目录树：强制无灰底，高亮使用线条 */
+.fd-sidebar-tree {
+  padding: 1rem;
+}
+
+.fd-sidebar-item {
+  position: relative;
+  background-color: transparent !important;
+  /* 强制无背景 */
+}
+
+/* 给激活项左侧加一条锋利的黑线 */
+.fd-sidebar-item[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #000;
+}
+
+/* 4. 下拉菜单重构 ( 锋利、卡片式 ) */
+/* 这将解决你的 topic/module 隔离视觉问题 */
+[data-sidebar="true"] [role="combobox"] {
+  border: 1px solid #000;
+  background-color: #000;
+  /* 下拉框本身黑底 */
+  color: #fff;
+  /* 白字 */
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* 下拉菜单弹出层 */
+.fd-popover-content {
+  border: 1px solid #000;
+  background-color: #fff !important;
+  padding: 0;
+}
+
+.fd-tab {
+  border-bottom: 1px solid #000;
+  color: #000 !important;
+}
+
+.fd-tab[data-active="true"] {
+  background-color: #000;
+  /* 激活项黑底 */
+  color: #fff !important;
+  /* 白字 */
+}
+
+/* 5. 右侧目录 ( TOC ) 锋利化 */
+.fd-toc {
+  border-left: 1px solid #000;
+  padding-left: 1rem;
+}
+
+.fd-toc li {
+  color: #444;
+}
+
+/* 解决图4黑 bar 的最终一击 */
+.fd-toc li a[data-active="true"] {
+  color: #000;
+  font-weight: bold;
+  background-color: transparent !important;
+  /* 强制无灰底 */
+  border-left-color: #000 !important;
+  /* 只有线条高亮 */
+}
+
+/* --- 强化排版：神椿/海报级标题控制 --- */
+
+/* --- 强化排版：接管全局标题 --- */
+
+/* 将 Fumadocs 原生的页面标题也变成海报体 */
+.prose h1,
+main h1:first-of-type {
+  font-family: var(--font-noto-serif), serif !important;
+  font-size: 3.5rem !important;
+  line-height: 1.1 !important;
+  margin-bottom: 1rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.05em;
+}
+
+/* Fumadocs 原生 description 的排版 */
+main p.text-muted-foreground {
+  font-size: 1.2rem !important;
+  color: #666 !important;
+  border-bottom: 2px solid #000 !important;
+  padding-bottom: 2.5rem !important;
+  margin-bottom: 2.5rem !important;
+  font-family: var(--font-inter), sans-serif !important;
+}
+
+/* H2：带有左侧几何黑块的模块分割 */
+.prose h2 {
+  font-size: 1.8rem !important;
+  margin-top: 4rem !important;
+  margin-bottom: 1.5rem !important;
+  position: relative;
+  padding-left: 1.2rem !important;
+}
+
+.prose h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 5px;
+  background-color: #000;
+}
+
+/* H3：克制的三级标题 */
+.prose h3 {
+  font-size: 1.3rem !important;
+  margin-top: 2.5rem !important;
+  color: #111 !important;
+}
+
+/* 调整正文文字的呼吸感 */
+.prose p,
+.prose li {
+  font-size: 1.05rem !important;
+  line-height: 1.8 !important;
+  color: #222 !important;
+}
+
+.dark strong {
+  color: #fff;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: #f2f2f2 !important;
+}
+
+.dark .prose p,
+.dark .prose li {
+  color: #d4d4d8 !important;
+}
+
+.dark main p.text-muted-foreground {
+  color: #a1a1aa !important;
+  border-bottom-color: #fff !important;
+}
+
+.dark pre,
+.dark code {
+  border-color: #fff;
 }
