@@ -4,6 +4,12 @@ import { SearchTrigger } from 'fumadocs-ui/layouts/shared/slots/search-trigger';
 import { ThemeSwitch } from 'fumadocs-ui/layouts/shared/slots/theme-switch';
 import { ShuuyouLogo } from '@/components/Logo';
 import homepageConfig from '@/content/editor/homepage.json';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'SYSTEM_BOOT | 驟葉WIKI', // 或使用 'SYSTEM_BOOT // 驟葉WIKI' 等
+    description: '具身智能与科研知识图谱的观测记录',
+};
 
 type HomeModule = {
     title: string;
@@ -50,7 +56,7 @@ export default function HomePage() {
                 </div>
 
                 <section className="mb-10 w-full max-w-4xl border border-black p-6 dark:border-white">
-                    <p className="text-sm leading-7 text-black/80 dark:text-white/80">
+                    <p className="text-sm leading-7 text-black/80 dark:text-white/80 whitespace-pre-line">
                         {homepageConfig.intro}
                     </p>
                 </section>

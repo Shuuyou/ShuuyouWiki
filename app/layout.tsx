@@ -14,13 +14,17 @@ const notoSerif = Noto_Serif_SC({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen font-sans">
+    // 💡 微调：将 lang="en" 改为 "zh-CN"
+    <html lang="zh-CN" className={`${inter.variable} ${notoSerif.variable}`} suppressHydrationWarning>
+      <body className="flex flex-col min-h-screen font-sans" suppressHydrationWarning>
         <RootProvider
           search={{
             enabled: true,
             options: {
               api: '/api/search',
+              // 🔴 核心修复：强制开启云端/服务端检索模式。
+              // 这样浏览器就不会在本地用英文规则乱切词，而是把关键词发给我们刚刚加了中文引擎的后端。
+              type: 'fetch', 
             },
           }}
           theme={{ enabled: true }}

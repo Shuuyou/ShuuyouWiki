@@ -1,6 +1,0 @@
-{
-  "title": "基础设施",
-  "description": "Ubuntu, ROS2, 开发环境与工作流",
-  "root": true,
-  "pages": ["quick-start"]
-}

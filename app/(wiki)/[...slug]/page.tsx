@@ -63,7 +63,8 @@ export async function generateMetadata(props: { params: Promise<{ slug?: string[
   if (!page) notFound();
 
   return {
-    title: page.data.title,
+    // [!] 修正点：利用模板字符串显式拼接系统名称
+    title: `${page.data.title} | 驟葉WIKI`, 
     description: page.data.description,
     openGraph: {
       images: getPageImage(page).url,

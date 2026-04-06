@@ -1,51 +1,33 @@
 {
-  "tagline": "Embodied Intelligence Knowledge Base",
-  "intro": "Shuuyou Wiki 聚焦具身智能工程链路，从环境基线到感知算法、从硬件控制到仿真验证，提供可落地的知识结构与实践入口。",
+  "tagline": "Bridging deterministic algorithms and aesthetic frequencies",
+  "intro": "为冰冷的机械装配关节，为虚拟的频段赋予心跳。\n跨越理性的刻度线，我们只是在数据的废墟里，重构那些未被定义的频率。",
   "modules": [
     {
-      "title": "环境与基础",
-      "sub": "Infrastructure",
-      "href": "/infrastructure/quick-start",
-      "desc": "Ubuntu & ROS2"
-    },
-    {
-      "title": "感知与算法",
-      "sub": "Perception",
-      "href": "/perception/quick-start",
-      "desc": "Vision & Multi-modal"
-    },
-    {
-      "title": "硬件与控制",
-      "sub": "Hardware",
-      "href": "/hardware/quick-start",
-      "desc": "Jetson & Microcontrollers"
-    },
-    {
-      "title": "仿真与建模",
-      "sub": "Simulation",
-      "href": "/simulation/quick-start",
-      "desc": "Isaac Sim & Gazebo"
+      "title": "公理与基石",
+      "sub": "Principia",
+      "href": "/principia/summary",
+      "desc": "丈量现实，抑或被现实重构。"
     }
   ],
   "infoCards": [
     {
-      "title": "学习路径",
-      "text": "先完成各模块快速开始，再进入专题文档与实操案例，逐步搭建完整技术栈。",
-      "href": "/infrastructure/quick-start",
-      "action": "进入路径"
+      "title": "关于本项目",
+      "text": "关于Shuuyou Wiki的一切！",
+      "href": "/about/overview",
+      "action": "了解更多"
     },
     {
-      "title": "关于本项目",
-      "text": "Shuuyou Wiki 当前处于个人建设阶段，优先确保知识结构与风格一致性。",
-      "href": "https://github.com/shuuyou/shuuyouwiki",
-      "action": "查看仓库"
+      "title": "参与共建",
+      "text": "本项目当前处于早期建设阶段，暂不开放共建，欢迎在仓库的Issues中提出建议~",
+      "href": "https://github.com/Shuuyou/ShuuyouWiki",
+      "action": "Github仓库"
     }
   ],
   "collaboration": {
-    "enabled": false,
+    "enabled": true,
     "title": "参与共建",
-    "message": "目前暂不开放外部贡献，后续将通过 PR 流程逐步开放协作。",
-    "href": "https://github.com/shuuyou/shuuyouwiki",
-    "linkText": "关注进展"
+    "message": "本项目当前处于早期建设阶段，暂不开放共建，欢迎在仓库的Issues中提出建议~",
+    "href": "https://github.com/Shuuyou/ShuuyouWiki",
+    "linkText": "Github仓库"
   }
 }

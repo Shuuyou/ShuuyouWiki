@@ -1,6 +1,0 @@
-{
-  "title": "感知与算法",
-  "description": "视觉处理与多模态模型",
-  "root": true,
-  "pages": ["quick-start"]
-}

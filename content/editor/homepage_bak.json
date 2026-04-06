@@ -1,0 +1,45 @@
+{
+  "tagline": "Bridging deterministic algorithms and aesthetic frequencies",
+  "intro": "为冰冷的机械装配关节，为虚拟的频段赋予心跳。\n跨越理性的刻度线，我们只是在数据的废墟里，重构那些未被定义的频率。",
+  "modules": [
+    {
+      "title": "环境与基础",
+      "sub": "Infrastructure",
+      "href": "/infrastructure/quick-start",
+      "desc": "Ubuntu & ROS2"
+    },
+    {
+      "title": "硬件与控制",
+      "sub": "Hardware",
+      "href": "/hardware/quick-start",
+      "desc": "Jetson & Microcontrollers"
+    },
+    {
+      "title": "仿真与建模",
+      "sub": "Simulation",
+      "href": "/simulation/quick-start",
+      "desc": "Isaac Sim & Gazebo"
+    }
+  ],
+  "infoCards": [
+    {
+      "title": "学习路径",
+      "text": "先完成各模块快速开始，再进入专题文档与实操案例，逐步搭建完整技术栈。",
+      "href": "/infrastructure/quick-start",
+      "action": "进入路径"
+    },
+    {
+      "title": "关于本项目",
+      "text": "关于Shuuyou Wiki的一切！",
+      "href": "/about/overview",
+      "action": "了解更多"
+    }
+  ],
+  "collaboration": {
+    "enabled": false,
+    "title": "参与共建",
+    "message": "本项目当前处于早期建设阶段，暂不开放共建，欢迎在仓库的Issues中提出建议~",
+    "href": "https://github.com/Shuuyou/ShuuyouWiki",
+    "linkText": "Github仓库"
+  }
+}

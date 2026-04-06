@@ -1,6 +1,0 @@
-{
-  "title": "硬件与控制",
-  "description": "Jetson, MCU, 总线与控制链路",
-  "root": true,
-  "pages": ["quick-start"]
-}

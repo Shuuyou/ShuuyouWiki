@@ -8,23 +8,13 @@ const config = {
   async redirects() {
     return [
       {
-        source: '/infrastructure',
-        destination: '/infrastructure/quick-start',
+        source: '/principia',
+        destination: '/principia/summary',
         permanent: false, // 开发阶段用 false
       },
       {
-        source: '/perception',
-        destination: '/perception/quick-start',
-        permanent: false,
-      },
-      {
-        source: '/hardware',
-        destination: '/hardware/quick-start',
-        permanent: false,
-      },
-      {
-        source: '/simulation',
-        destination: '/simulation/quick-start',
+        source: '/about',
+        destination: '/about/overview',
         permanent: false,
       },
     ];

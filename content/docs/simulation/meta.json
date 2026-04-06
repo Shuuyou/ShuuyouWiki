@@ -1,6 +1,0 @@
-{
-  "title": "仿真与建模",
-  "description": "Isaac Sim, Gazebo, 数字孪生验证",
-  "root": true,
-  "pages": ["quick-start"]
-}

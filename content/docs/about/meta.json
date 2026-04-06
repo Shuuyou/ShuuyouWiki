@@ -1,0 +1,6 @@
+{
+  "title": "关于本项目",
+  "description": "关于Shuuyou Wiki的一切！",
+  "root": true,
+  "pages": ["overview"]
+}

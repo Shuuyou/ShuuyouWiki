@@ -9,7 +9,12 @@ export function DiscussionPlaceholder({ enabled = false, discussionUrl }: Discus
   if (!enabled) {
     return (
       <div className="mt-4 border border-black p-4 text-sm leading-7 dark:border-white">
-        评论区暂未开放。当前阶段以内容建设和结构稳定为主，后续将按计划开放讨论与反馈。
+        评论区暂未开放哦~如果你有任何想法或建议，欢迎前往仓库提出Issues！
+        <div className="mt-2">
+          <Link href="https://github.com/Shuuyou/ShuuyouWiki" className="underline decoration-1 underline-offset-4">
+            Github仓库
+          </Link>
+        </div>
       </div>
     );
   }
