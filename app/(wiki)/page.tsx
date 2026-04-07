@@ -87,7 +87,7 @@ function CollaborationNotice({ enabled, title, message, href, linkText }: Collab
             <h3 className="font-serif text-xl font-black">{title}</h3>
             <p className="mt-3 text-sm leading-7 opacity-85">{message}</p>
             {href ? (
-                <Link href={href} className="mt-4 inline-block text-[11px] tracking-[0.2em] uppercase underline underline-offset-4">
+                <Link href={href} prefetch={false} className="mt-4 inline-block text-[11px] tracking-[0.2em] uppercase underline underline-offset-4">
                     {linkText || '查看详情'}
                 </Link>
             ) : null}
@@ -109,6 +109,7 @@ function InfoCard({
     return (
         <Link
             href={href}
+            prefetch={false}
             className="group block border border-black p-6 transition-all duration-0 hover:bg-black hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-black"
         >
             <h3 className="font-serif text-xl font-black">{title}</h3>
@@ -122,6 +123,7 @@ function ModuleCard({ title, sub, href, desc }: { title: string; sub: string; hr
     return (
         <Link
             href={href}
+            prefetch={false}
             className="group block p-8 border border-black dark:border-white bg-white dark:bg-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-0"
         >
             <h2 className="text-2xl font-bold font-serif mb-2">{title}</h2>
