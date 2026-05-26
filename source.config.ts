@@ -1,3 +1,5 @@
+import rehypeKatex from 'rehype-katex';
+import remarkMath from 'remark-math';
 import { defineConfig, defineDocs } from 'fumadocs-mdx/config';
 import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
 import { z } from 'zod';
@@ -28,5 +30,8 @@ export const docs = defineDocs({
 export default defineConfig({
   mdxOptions: {
     // MDX options
+    remarkPlugins: [remarkMath],
+    // Place it at first, it should be executed before the syntax highlighter
+    rehypePlugins: (v) => [rehypeKatex, ...v],
   },
 });

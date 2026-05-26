@@ -1,6 +1,7 @@
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import { Inter, Noto_Serif_SC } from 'next/font/google';
 import './global.css';
+import 'katex/dist/katex.css';
 import type { ReactNode } from 'react';
 
 // 引入系统英文无衬线字体
